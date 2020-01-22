@@ -1,9 +1,12 @@
-const WIDTH = 800
+const WIDTH = 1000
 const HEIGHT = 400
+
+const fftCanvasADH = 30
+const fftCanvasADW = 540
 
 const dpi = window.devicePixelRatio
 
-const fftSize = 512
+const fftSize = 1024
 const initFrq = 450
 
 const inlinearFx = v => Math.round(30.3826203132303 * Math.pow(Math.E, 0.0316768436278822 * v))
@@ -15,9 +18,15 @@ let isPlaying = false
 
 let TimeBaseDrawWay = 2
 
-const audioContext = new window.AudioContext()
+/**
+ * @type {AudioContext}
+ */
+let audioContext = null
 
-const frStep = audioContext.sampleRate / 2 / (fftSize / 2)
+/**
+ * @type {number}
+ */
+let frStep = null
 
 /**
  * @typedef {{ ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, stasis: boolean }} CanvasWrapper
@@ -98,6 +107,8 @@ let sub = {
 }
 
 function initAudio() {
+  audioContext = new window.AudioContext()
+  frStep = audioContext.sampleRate / 2 / (fftSize / 2)
   // The oscillator creates the sound waves.
   // As you can see on the canvas when drawing
   // the square wave, the wave is not perfectly
@@ -368,16 +379,42 @@ function run() {
 
   sub.canvas = document.getElementById('sub')
   sub.ctx = sub.canvas.getContext('2d')
-  sub.canvas.width = WIDTH * dpi
-  sub.canvas.height = (HEIGHT + 30) * dpi
-  sub.canvas.style.width = WIDTH + 'px'
-  sub.canvas.style.height = (HEIGHT + 30) + 'px'
+  sub.canvas.width = (WIDTH + fftCanvasADW) * dpi
+  sub.canvas.height = (HEIGHT + fftCanvasADH) * dpi
+  sub.canvas.style.width = (WIDTH + fftCanvasADW) + 'px'
+  sub.canvas.style.height = (HEIGHT + fftCanvasADH) + 'px'
   sub.ctx.scale(dpi, dpi)
 
   initDom()
-  initAudio()
 
-  drawFTScale()
+  /**
+   * If you create your AudioContext on page load,
+   * you’ll have to call resume() at some time after the user interacted with the page
+   * (e.g., user clicked a button).
+   * Alternatively, the AudioContext will be resumed after
+   * a user gesture if start() is called on any attached node.
+   */
+
+  /**
+   * 为避免初始化失败
+   */
+  main.ctx.font = '26px sans-serif'
+  main.ctx.textAlign = 'center'
+  main.ctx.fillText('请点击任意空白处来初始化', WIDTH / 2, HEIGHT / 2)
+
+  const init = () => {
+    console.log('init invoked.')
+
+    setTimeout(() => {
+      initAudio()
+
+      drawFTScale()
+    }, 100)
+
+    document.removeEventListener('mousedown', init)
+  }
+  
+  document.addEventListener('mousedown', init)
 }
 
 /**
@@ -428,7 +465,7 @@ function drawFT(ana) {
   let x = 0
   const barWidth = 2
 
-  sub.ctx.clearRect(0, 0, WIDTH, HEIGHT)
+  sub.ctx.clearRect(0, 0, WIDTH + fftCanvasADW, HEIGHT)
 
   for(let i = 0; i < bufferLengthAlt; i++) {
     const powerV = dataArrayAlt[i] // 0 - 255 -> 0 - HEIGHT
@@ -438,14 +475,14 @@ function drawFT(ana) {
     sub.ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
 
     x += barWidth + 1
-    if (x > WIDTH) break
+    if (x > (WIDTH + fftCanvasADW)) break
   }
 
   requestAnimationFrame(() => drawFT(ana))
 }
 
 function drawFTScale () {
-  sub.ctx.clearRect(0, HEIGHT + 2, WIDTH, 50)
+  sub.ctx.clearRect(0, HEIGHT + 2, WIDTH + fftCanvasADW, 50)
   sub.ctx.fillStyle = '#000000'
   sub.ctx.font = '6px'
 

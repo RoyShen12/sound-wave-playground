@@ -9,6 +9,7 @@
         -webkit-font-smoothing: antialiased;
         -webkit-tap-highlight-color: transparent;
         margin: 0;
+        margin-left: 10px;
       }
       .row {
         position: relative;
@@ -19,36 +20,36 @@
         position: absolute;
         visibility: visible;
         border: 1px solid #f7f7f7;
-        right: 100px;
+        right: 30px;
       }
       button {
         outline: none;
       }
       .spsv_sd {
-        right: 760px;
+        right: 890px;
         top: 8px;
         position: absolute;
       }
       .spsv_select {
         position: absolute;
-        right: 580px;
+        right: 720px;
         top: 8px;
         width: 150px;
       }
       .tb_draw {
         position: absolute;
-        right: 420px;
+        right: 520px;
         top: 8px;
         width: 140px;
       }
       .tb_draw_radio {
         position: absolute;
-        right: 310px;
+        right: 340px;
         top: 8px;
       }
       .tb_freeze {
         position: absolute;
-        right: 220px;
+        right: 100px;
         top: 8px;
       }
     </style>
@@ -68,17 +69,17 @@
     <span class="tb_draw">时域图绘图方式</span>
     <div class="tb_draw_radio">
       <input type="radio" name="tb_draw_way" value="0">
-      <label for="0">点</label>
+      <label for="0">采样点</label>
       <input type="radio" name="tb_draw_way" value="1">
-      <label for="1">波</label>
+      <label for="1">平面</label>
       <input type="radio" name="tb_draw_way" value="2" checked>
-      <label for="2">线</label>
+      <label for="2">波</label>
     </div>
 
     <button id="tb_fz" class="tb_freeze">冻结图像</button>
 
     <canvas id="main" style="z-index: 1;top: 40px;"></canvas>
-    <canvas id="sub" style="z-index: 0;top: 450px;"></canvas>
+    <canvas id="sub" style="z-index: 0;top: 440px;"></canvas>
 
     <p><span id="status"></span></p>
 
