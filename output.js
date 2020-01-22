@@ -368,11 +368,11 @@ function run() {
 
   sub.canvas = document.getElementById('sub')
   sub.ctx = sub.canvas.getContext('2d')
-  main.canvas.width = WIDTH * dpi
-  main.canvas.height = (HEIGHT + 30) * dpi
-  main.canvas.style.width = WIDTH + 'px'
-  main.canvas.style.height = (HEIGHT + 30) + 'px'
-  main.ctx.scale(dpi, dpi)
+  sub.canvas.width = WIDTH * dpi
+  sub.canvas.height = (HEIGHT + 30) * dpi
+  sub.canvas.style.width = WIDTH + 'px'
+  sub.canvas.style.height = (HEIGHT + 30) + 'px'
+  sub.ctx.scale(dpi, dpi)
 
   initDom()
   initAudio()
