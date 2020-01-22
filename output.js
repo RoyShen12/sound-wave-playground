@@ -358,11 +358,21 @@ function initDom() {
 function run() {
   main.canvas = document.getElementById('main')
   main.ctx = main.canvas.getContext('2d')
+  main.canvas.width = WIDTH * dpi
+  main.canvas.height = HEIGHT * dpi
+  main.canvas.style.width = WIDTH + 'px'
+  main.canvas.style.height = HEIGHT + 'px'
+  main.ctx.scale(dpi, dpi)
   main.ctx.fillStyle = '#f52311'
   main.ctx.strokeStyle = '#f52311'
 
   sub.canvas = document.getElementById('sub')
   sub.ctx = sub.canvas.getContext('2d')
+  main.canvas.width = WIDTH * dpi
+  main.canvas.height = (HEIGHT + 30) * dpi
+  main.canvas.style.width = WIDTH + 'px'
+  main.canvas.style.height = (HEIGHT + 30) + 'px'
+  main.ctx.scale(dpi, dpi)
 
   initDom()
   initAudio()

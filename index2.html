@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+      body {
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        margin: 0;
+      }
+      .row {
+        position: relative;
+        box-sizing: border-box;
+        display: block;
+      }
+      canvas {
+        position: absolute;
+        visibility: visible;
+        border: 1px solid #f7f7f7;
+        right: 100px;
+      }
+      button {
+        outline: none;
+      }
+      .spsv_sd {
+        right: 760px;
+        top: 8px;
+        position: absolute;
+      }
+      .spsv_select {
+        position: absolute;
+        right: 580px;
+        top: 8px;
+        width: 150px;
+      }
+      .tb_draw {
+        position: absolute;
+        right: 420px;
+        top: 8px;
+        width: 140px;
+      }
+      .tb_draw_radio {
+        position: absolute;
+        right: 310px;
+        top: 8px;
+      }
+      .tb_freeze {
+        position: absolute;
+        right: 220px;
+        top: 8px;
+      }
+    </style>
+    <title>Wave</title>
+    <script type="text/javascript" src="jquery3.4.1.min.js"></script>
+    <script type="text/javascript" src="lodash.min.js"></script>
+    <script type="text/javascript" src="tools.js"></script>
+    <script type="text/javascript" src="output.js"></script>
+  </head>
+  <body onload="run()">
+    <button id="toggleSound"><span id="toggleLabel">Start!</span></button>
+
+    <span class="spsv_sd">时域图每帧采样次数</span>
+    <select id="spsv" class="spsv_select">
+    </select>
+
+    <span class="tb_draw">时域图绘图方式</span>
+    <div class="tb_draw_radio">
+      <input type="radio" name="tb_draw_way" value="0">
+      <label for="0">点</label>
+      <input type="radio" name="tb_draw_way" value="1">
+      <label for="1">波</label>
+      <input type="radio" name="tb_draw_way" value="2" checked>
+      <label for="2">线</label>
+    </div>
+
+    <button id="tb_fz" class="tb_freeze">冻结图像</button>
+
+    <canvas id="main" style="z-index: 1;top: 40px;"></canvas>
+    <canvas id="sub" style="z-index: 0;top: 450px;"></canvas>
+
+    <p><span id="status"></span></p>
+
+  </body>
+</html>
