@@ -3,4 +3,5 @@
 # Note
 仅在 1920x1080 屏幕下完成测试
 # live demo
-visiting [sound-wave-playground](https://royshen12.github.io/sound-wave-playground/).
+visiting [sound-wave-playground](https://royshen12.github.io/sound-wave-playground/).  
+visiting [sound-recording-fourier-transform](https://royshen12.github.io/sound-wave-playground/MIC.html).
