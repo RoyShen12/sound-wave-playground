@@ -40,20 +40,24 @@ let fr = {
 }
 
 function run() {
-  main.canvas = document.getElementById('main')
-  main.ctx = main.canvas.getContext('2d')
-  main.ctx.fillStyle = '#f52311'
+  document.onmousemove = () => {
+    document.onmousemove = null
 
-  sub.canvas = document.getElementById('mainSUB')
-  sub.ctx = sub.canvas.getContext('2d')
-  sub.ctx.fillStyle = '#1123fe'
+    main.canvas = document.getElementById('main')
+    main.ctx = main.canvas.getContext('2d')
+    main.ctx.fillStyle = '#f52311'
 
-  fr.canvas = document.getElementById('frcy')
-  fr.ctx = fr.canvas.getContext('2d')
+    sub.canvas = document.getElementById('mainSUB')
+    sub.ctx = sub.canvas.getContext('2d')
+    sub.ctx.fillStyle = '#1123fe'
 
-  drawFTScale()
+    fr.canvas = document.getElementById('frcy')
+    fr.ctx = fr.canvas.getContext('2d')
 
-  prepareSound(v => console.log(v))
+    drawFTScale()
+
+    prepareSound(v => console.log(v))
+  }
 }
 
 /**
