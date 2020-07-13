@@ -1,10 +1,9 @@
 const LEN = 800
 
-const audioContext = new window.AudioContext()
-
 const fftSize = 4096
 
-const frStep = audioContext.sampleRate / 2 / (fftSize / 2)
+let audioContext = null
+let frStep = null
 
 /**
  * @typedef {{ ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement }} CanvasWrapper
@@ -42,6 +41,9 @@ let fr = {
 function run() {
   document.onmousemove = () => {
     document.onmousemove = null
+
+    audioContext = new window.AudioContext()
+    frStep = audioContext.sampleRate / 2 / (fftSize / 2)
 
     main.canvas = document.getElementById('main')
     main.ctx = main.canvas.getContext('2d')
