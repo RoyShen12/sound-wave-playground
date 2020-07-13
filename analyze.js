@@ -2,7 +2,9 @@ const LEN = 800
 
 const fftSize = 4096
 
+/** @type {AudioContext} */
 let audioContext = null
+/** @type {number} */
 let frStep = null
 
 /**
@@ -39,22 +41,28 @@ let fr = {
 }
 
 function run() {
-  document.onmousemove = () => {
-    document.onmousemove = null
+  main.canvas = document.getElementById('main')
+  main.ctx = main.canvas.getContext('2d')
+  main.ctx.fillStyle = '#f52311'
 
-    audioContext = new window.AudioContext()
+  main.ctx.save()
+  main.ctx.font = '18px Times New Roman'
+  main.ctx.textAlign = 'center'
+  main.ctx.fillText('请点击任意空白处来初始化', LEN / 2, LEN / 4)
+  main.ctx.restore()
+
+  sub.canvas = document.getElementById('mainSUB')
+  sub.ctx = sub.canvas.getContext('2d')
+  sub.ctx.fillStyle = '#1123fe'
+
+  fr.canvas = document.getElementById('frcy')
+  fr.ctx = fr.canvas.getContext('2d')
+
+  document.onclick = () => {
+    document.onclick = null
+
+    audioContext = new AudioContext()
     frStep = audioContext.sampleRate / 2 / (fftSize / 2)
-
-    main.canvas = document.getElementById('main')
-    main.ctx = main.canvas.getContext('2d')
-    main.ctx.fillStyle = '#f52311'
-
-    sub.canvas = document.getElementById('mainSUB')
-    sub.ctx = sub.canvas.getContext('2d')
-    sub.ctx.fillStyle = '#1123fe'
-
-    fr.canvas = document.getElementById('frcy')
-    fr.ctx = fr.canvas.getContext('2d')
 
     drawFTScale()
 
