@@ -107,7 +107,7 @@ let sub = {
 }
 
 function initAudio() {
-  audioContext = new window.AudioContext()
+  audioContext = new (window.AudioContext || window.webkitAudioContext)()
   frStep = audioContext.sampleRate / 2 / (fftSize / 2)
   // The oscillator creates the sound waves.
   // As you can see on the canvas when drawing

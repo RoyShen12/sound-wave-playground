@@ -61,7 +61,7 @@ function run() {
   document.onclick = () => {
     document.onclick = null
 
-    audioContext = new AudioContext()
+    audioContext = new (window.AudioContext || window.webkitAudioContext)()
     frStep = audioContext.sampleRate / 2 / (fftSize / 2)
 
     drawFTScale()
