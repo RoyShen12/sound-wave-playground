@@ -1,7 +1,7 @@
 # sound-wave-playground
-展示音频的叠加和傅立叶转换后的频域图
+Display the superposition of audio and the frequency domain graph after Fourier transformation.
 # Note
-仅在 1920x1080 屏幕下完成测试
+Only tested on screen of 1920x1080 resolution.
 # live demo
 visiting [sound-wave-playground](https://royshen12.github.io/sound-wave-playground/).  
 visiting [sound-recording-fourier-transform](https://royshen12.github.io/sound-wave-playground/MIC.html).
