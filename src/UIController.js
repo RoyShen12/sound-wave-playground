@@ -47,7 +47,7 @@ export class UIController {
 
     selector.onchange = (e) => {
       const bufferSize = +e.target.value
-      this.audioEngine.initScriptProcessor(bufferSize)
+      this.audioEngine.initProcessorNode(bufferSize)
     }
   }
 

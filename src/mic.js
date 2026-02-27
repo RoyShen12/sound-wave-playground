@@ -3,7 +3,7 @@
  * 捕获麦克风输入并进行实时可视化分析
  */
 
-import { initHiDPICanvas, formatFrequency } from './utils.js'
+import { formatFrequency } from './utils.js'
 
 const LEN = 800
 const FFT_SIZE = 4096

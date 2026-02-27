@@ -1,15 +1,15 @@
 # 项目进度跟踪
 
-## 当前阶段：Phase 1 - 项目工程化基础
+## 当前阶段：Phase 2 - 响应式 UI 框架
 
-### Phase 1 子任务进度
+### Phase 1 子任务进度 ✅ Phase 1 Complete
 - [x] P1.1 初始化 package.json，配置 Vite 构建工具
 - [x] P1.2 将全局代码重构为 ES Module（AudioEngine, Visualizer, UIController）
 - [x] P1.3 移除 jQuery 和 Lodash 依赖，用原生 JS 替代
-- [ ] P1.4 将 ScriptProcessorNode 替换为 AudioWorkletNode
-- [ ] P1.5 清理 tools.js 中未使用的函数，重新组织工具模块
-- [ ] P1.6 修复所有 typo（如 whiteNoiseVolum -> whiteNoiseVolume）
-- [ ] P1.7 添加 ESLint + Prettier 配置
+- [x] P1.4 将 ScriptProcessorNode 替换为 AudioWorkletNode
+- [x] P1.5 清理 tools.js 中未使用的函数，重新组织工具模块
+- [x] P1.6 修复所有 typo（如 whiteNoiseVolum -> whiteNoiseVolume）
+- [x] P1.7 添加 ESLint + Prettier 配置
 
 ### Phase 2 子任务进度
 - [ ] P2.1 设计深色主题专业音频 UI
@@ -86,3 +86,13 @@
   - 入口文件：main.js (振荡器演示), mic.js (麦克风分析)
   - 移除 jQuery 和 Lodash 依赖，全部用原生 JS 替代
   - `npm run build` 验证通过
+
+### 迭代 2 - Phase 1.4~1.7: AudioWorklet + 清理 + ESLint/Prettier
+- 状态：已完成
+- 完成内容：
+  - 创建 AudioWorklet 处理器（public/audio-worklet-processor.js）
+  - AudioEngine 支持 AudioWorklet，带 ScriptProcessorNode 回退
+  - 清理旧 tools.js 函数，新工具已整合到 src/utils.js
+  - 修复 whiteNoiseVolum → whiteNoiseVolume 等 typo
+  - 配置 ESLint + Prettier，ESLint 检查通过
+  - Phase 1 完成

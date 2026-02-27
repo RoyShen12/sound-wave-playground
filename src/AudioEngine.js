@@ -53,8 +53,14 @@ export class AudioEngine {
     /** @type {boolean} 是否正在播放 */
     this.isPlaying = false
 
-    /** @type {ScriptProcessorNode | null} 脚本处理器（将在 P1.4 替换为 AudioWorklet） */
-    this.scriptProcessor = null
+    /** @type {AudioWorkletNode | ScriptProcessorNode | null} 音频处理节点 */
+    this.processorNode = null
+
+    /** @type {boolean} 是否使用 AudioWorklet */
+    this.useWorklet = false
+
+    /** @type {number} 当前缓冲区大小 */
+    this.bufferSize = 4096
 
     /** @type {((buffer: Float32Array) => void) | null} 音频处理回调 */
     this.onAudioProcess = null
@@ -63,7 +69,7 @@ export class AudioEngine {
   /**
    * 初始化音频上下文和所有音频节点
    */
-  init() {
+  async init() {
     // 创建音频上下文（兼容 Safari）
     const AudioContextClass = window.AudioContext || window.webkitAudioContext
     this.audioContext = new AudioContextClass()
@@ -86,6 +92,9 @@ export class AudioEngine {
     this.masterGain.connect(this.frequencyAnalyser)
     this.masterGain.connect(this.timeDomainAnalyser)
     this.masterGain.connect(this.audioContext.destination)
+
+    // 尝试加载 AudioWorklet
+    await this._initAudioWorklet()
   }
 
   /**
@@ -163,21 +172,77 @@ export class AudioEngine {
   }
 
   /**
-   * 初始化脚本处理器（用于时域数据获取）
+   * 初始化 AudioWorklet（带 ScriptProcessorNode 回退）
+   * @private
+   */
+  async _initAudioWorklet() {
+    try {
+      if (this.audioContext.audioWorklet) {
+        await this.audioContext.audioWorklet.addModule('./audio-worklet-processor.js')
+        this.useWorklet = true
+        console.log('AudioWorklet 加载成功')
+      }
+    } catch (err) {
+      console.warn('AudioWorklet 不可用，回退到 ScriptProcessorNode:', err)
+      this.useWorklet = false
+    }
+  }
+
+  /**
+   * 初始化音频处理节点（用于时域数据获取）
+   * 优先使用 AudioWorkletNode，不支持时回退到 ScriptProcessorNode
    * @param {number} bufferSize - 缓冲区大小
    */
-  initScriptProcessor(bufferSize = 4096) {
-    if (this.scriptProcessor) {
-      this.frequencyAnalyser.disconnect(this.scriptProcessor)
-      this.scriptProcessor.disconnect()
+  initProcessorNode(bufferSize = 4096) {
+    this.bufferSize = bufferSize
+
+    // 断开旧节点
+    if (this.processorNode) {
+      this.frequencyAnalyser.disconnect(this.processorNode)
+      this.processorNode.disconnect()
+      this.processorNode = null
     }
 
-    this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, 1, 1)
-    this.frequencyAnalyser.connect(this.scriptProcessor)
-    // 连接到 destination 以解决 Chrome 的 bug
-    this.scriptProcessor.connect(this.audioContext.destination)
+    if (this.useWorklet) {
+      this._createWorkletNode(bufferSize)
+    } else {
+      this._createScriptProcessorNode(bufferSize)
+    }
+  }
 
-    this.scriptProcessor.onaudioprocess = (audioEvt) => {
+  /**
+   * 创建 AudioWorkletNode
+   * @param {number} bufferSize - 缓冲区大小
+   * @private
+   */
+  _createWorkletNode(bufferSize) {
+    this.processorNode = new AudioWorkletNode(this.audioContext, 'time-domain-processor')
+    this.frequencyAnalyser.connect(this.processorNode)
+    this.processorNode.connect(this.audioContext.destination)
+
+    // 设置缓冲区大小
+    this.processorNode.port.postMessage({ type: 'setBufferSize', bufferSize })
+
+    // 接收来自 Worklet 的音频数据
+    this.processorNode.port.onmessage = (event) => {
+      if (event.data.type === 'audioData' && this.onAudioProcess) {
+        this.onAudioProcess(event.data.buffer)
+      }
+    }
+  }
+
+  /**
+   * 创建 ScriptProcessorNode（回退方案）
+   * @param {number} bufferSize - 缓冲区大小
+   * @private
+   */
+  _createScriptProcessorNode(bufferSize) {
+    this.processorNode = this.audioContext.createScriptProcessor(bufferSize, 1, 1)
+    this.frequencyAnalyser.connect(this.processorNode)
+    // 连接到 destination 以解决 Chrome 的 bug
+    this.processorNode.connect(this.audioContext.destination)
+
+    this.processorNode.onaudioprocess = (audioEvt) => {
       if (this.onAudioProcess) {
         const buffer = audioEvt.inputBuffer.getChannelData(0)
         this.onAudioProcess(buffer)
