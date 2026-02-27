@@ -10,6 +10,7 @@
  * - 卷积混响（IR 加载）
  * - 动态压缩器控制
  * - 加法合成器谐波控制
+ * @module UIController
  */
 
 import { AudioFileManager, setupDragDrop } from './AudioFileManager.js'
@@ -31,8 +32,8 @@ const FILTER_TYPES = [
 
 export class UIController {
   /**
-   * @param {import('./AudioEngine.js').AudioEngine} audioEngine - 音频引擎
-   * @param {import('./Visualizer.js').Visualizer} visualizer - 可视化器
+   * @param {AudioEngine} audioEngine - 音频引擎
+   * @param {Visualizer} visualizer - 可视化器
    */
   constructor(audioEngine, visualizer) {
     this.audioEngine = audioEngine

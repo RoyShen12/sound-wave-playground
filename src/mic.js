@@ -1,6 +1,7 @@
 /**
  * 麦克风分析入口文件
  * 捕获麦克风输入并进行实时可视化分析
+ * @module mic
  */
 
 import { formatFrequency } from './utils.js'

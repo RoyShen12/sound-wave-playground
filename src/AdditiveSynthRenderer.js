@@ -2,6 +2,7 @@
  * AdditiveSynthRenderer.js
  * 加法合成谐波可视化渲染器
  * 显示各谐波的振幅柱状图和合成波形预览
+ * @module AdditiveSynthRenderer
  */
 
 import { initHiDPICanvas } from './utils.js'

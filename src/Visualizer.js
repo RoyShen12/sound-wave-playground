@@ -2,6 +2,7 @@
  * 可视化模块
  * 管理 Canvas 渲染、时域图和频域图的绘制
  * 支持深色主题、自适应容器、峰值标注、dB 刻度
+ * @module Visualizer
  */
 
 import { initHiDPICanvas, formatFrequency } from './utils.js'
@@ -281,7 +282,7 @@ export class Visualizer {
 
   /**
    * 启动频域可视化循环
-   * @param {import('./AudioEngine.js').AudioEngine} audioEngine
+   * @param {AudioEngine} audioEngine
    */
   startFrequencyVisualization(audioEngine) {
     const draw = () => {

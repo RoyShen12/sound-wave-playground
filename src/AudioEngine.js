@@ -1,6 +1,7 @@
 /**
  * 音频引擎模块
  * 管理 AudioContext、振荡器、增益节点和分析器
+ * @module AudioEngine
  */
 
 // 常量配置
@@ -62,7 +63,7 @@ export class AudioEngine {
     /** @type {number} 当前缓冲区大小 */
     this.bufferSize = 4096
 
-    /** @type {((buffer: Float32Array) => void) | null} 音频处理回调 */
+    /** @type {?Function} 音频处理回调 */
     this.onAudioProcess = null
 
     /** @type {AudioBufferSourceNode | null} 外部音频源（文件播放） */

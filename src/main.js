@@ -2,6 +2,7 @@
  * 应用入口文件
  * 初始化音频引擎、可视化器和 UI 控制器
  * Phase 5 扩展：集成滤波器响应渲染、压缩器可视化、加法合成可视化
+ * @module main
  */
 
 import { AudioEngine } from './AudioEngine.js'

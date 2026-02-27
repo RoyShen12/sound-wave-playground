@@ -1,13 +1,14 @@
 /**
  * 工具函数模块
  * 提供数学计算、Canvas 绘图等通用辅助函数
+ * @module utils
  */
 
 /**
  * 创建线性函数 y = kx + b
  * @param {number} k - 斜率
  * @param {number} b - 截距
- * @returns {(x: number) => number}
+ * @returns {function} 线性函数 y = kx + b
  */
 export function linearFunction(k, b) {
   return x => k * x + b
@@ -19,7 +20,7 @@ export function linearFunction(k, b) {
  * @param {number} y - 起点 y 坐标
  * @param {number} degree - 角度（弧度）
  * @param {number} length - 长度
- * @returns {[number, number]} 目标点坐标 [x, y]
+ * @returns {Array<number>} 目标点坐标 [x, y]
  */
 export function polarToCartesian(x, y, degree, length) {
   const dx = Math.cos(degree) * length

@@ -2,6 +2,7 @@
  * DSP Worker 管理器
  * 负责创建和管理 DSP Web Worker，将耗时的音频分析计算移到后台线程
  * 当 Worker 不可用时自动回退到主线程同步计算
+ * @module DSPWorkerManager
  */
 
 import {

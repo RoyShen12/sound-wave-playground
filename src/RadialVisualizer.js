@@ -1,6 +1,7 @@
 /**
  * 高级可视化模块
  * 提供圆形/径向频谱可视化和李萨如图形（立体声场显示）
+ * @module RadialVisualizer
  */
 
 import { initHiDPICanvas } from './utils.js'

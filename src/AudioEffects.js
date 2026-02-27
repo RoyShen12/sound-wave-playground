@@ -2,6 +2,7 @@
  * AudioEffects.js
  * 音频效果与滤波器模块，提供滤波器链、动态压缩器、卷积混响等功能。
  * 同时导出加法合成器 AdditiveSynthesizer 类。
+ * @module AudioEffects
  */
 
 /**

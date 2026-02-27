@@ -1,6 +1,7 @@
 /**
  * FilterResponseRenderer.js
  * 滤波器频率响应曲线渲染器和压缩器特性曲线可视化
+ * @module FilterResponseRenderer
  */
 
 import { initHiDPICanvas, formatFrequency } from './utils.js'
@@ -54,7 +55,7 @@ export class FilterResponseRenderer {
    * 绘制滤波器频率响应曲线
    * 在对数频率轴上绘制幅度响应和相位响应
    *
-   * @param {import('./AudioEffects.js').AudioEffects} audioEffects - 音频效果实例
+   * @param {AudioEffects} audioEffects - 音频效果实例
    * @param {number} sampleRate - 采样率
    */
   drawFilterResponse(audioEffects, sampleRate) {

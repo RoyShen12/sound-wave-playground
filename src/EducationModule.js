@@ -7,6 +7,7 @@
  * - 采样定理（Nyquist）与混叠现象
  * - Gibbs 现象演示
  * - 预设场景库
+ * @module EducationModule
  */
 
 import { initHiDPICanvas } from './utils.js'

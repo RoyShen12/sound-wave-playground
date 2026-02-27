@@ -2,6 +2,7 @@
  * AudioFileManager - 音频文件导入与录制管理器
  *
  * 提供音频文件的导入（MP3/WAV/OGG）、麦克风录制、WAV 导出等功能。
+ * @module AudioFileManager
  */
 
 export class AudioFileManager {

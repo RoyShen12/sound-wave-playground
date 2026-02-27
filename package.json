@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "docs": "jsdoc -c jsdoc.config.json"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
+    "jsdoc": "^4.0.5",
     "prettier": "^3.8.1",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"

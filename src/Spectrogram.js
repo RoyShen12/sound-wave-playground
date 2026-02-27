@@ -4,6 +4,7 @@
  * 将频域数据以时间-频率-幅度热力图的形式持续向下滚动展示，
  * 支持三种配色方案：热力图、灰度、彩虹。
  * 点击频谱图可显示对应位置的频率与幅度信息。
+ * @module Spectrogram
  */
 
 import { initHiDPICanvas, formatFrequency } from './utils.js';
