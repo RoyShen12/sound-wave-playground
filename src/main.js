@@ -37,12 +37,18 @@ const initAudioOnClick = async () => {
   // 初始化音频引擎（异步加载 AudioWorklet）
   await audioEngine.init()
 
+  // 设置音频参数给可视化器（用于 DSP 分析）
+  visualizer.setAudioParams(audioEngine.sampleRate, audioEngine.frequencyStep)
+
   // 初始化音频处理节点
   audioEngine.initProcessorNode(4096)
 
   // 设置音频处理回调：将 PCM 数据传递给可视化器绘制时域图
   audioEngine.onAudioProcess = (buffer) => {
     visualizer.drawTimeDomain(buffer)
+
+    // 更新 DSP 信息面板
+    updateDSPInfoPanel(visualizer.dspInfo)
   }
 
   // 初始化控制面板（需要音频引擎的数据）
@@ -60,3 +66,14 @@ const initAudioOnClick = async () => {
 }
 
 document.addEventListener('mousedown', initAudioOnClick)
+
+/**
+ * 更新 DSP 信息面板
+ * @param {object} dspInfo
+ */
+function updateDSPInfoPanel(dspInfo) {
+  const thdEl = document.getElementById('thdValue')
+  if (thdEl && dspInfo.thd > 0) {
+    thdEl.textContent = `THD: ${dspInfo.thd.toFixed(1)}%`
+  }
+}
