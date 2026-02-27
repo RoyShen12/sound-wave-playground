@@ -711,3 +711,191 @@ select:focus {
   flex-wrap: wrap;
   gap: var(--spacing-md);
 }
+
+/* ===== 文件播放信息栏 ===== */
+.file-playback-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.file-icon {
+  font-size: 1.1rem;
+}
+
+.file-duration {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.file-controls {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.file-controls .small-btn {
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  background: var(--bg-control);
+  border: 1px solid var(--border-primary);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.15s ease;
+}
+
+.file-controls .small-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ===== 拖拽上传覆盖层 ===== */
+.drag-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 165, 233, 0.1);
+  border: 2px dashed var(--accent-secondary);
+  border-radius: var(--radius-md);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-overlay.active {
+  display: flex;
+}
+
+.drag-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--accent-secondary);
+  font-size: 1rem;
+}
+
+.drag-icon {
+  font-size: 2.5rem;
+}
+
+.drag-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ===== 录制按钮状态 ===== */
+.toolbar-btn.recording {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+  animation: recording-pulse 1s ease-in-out infinite;
+}
+
+@keyframes recording-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ===== 滤波器控制区 ===== */
+.filter-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--bg-control);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ===== 谐波滑块组 ===== */
+.harmonics-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.harmonic-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 2px 0;
+}
+
+.harmonic-label {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  min-width: 24px;
+  text-align: right;
+}
+
+.harmonic-slider {
+  flex: 1;
+}
+
+.harmonic-value {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--accent-secondary);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* ===== 压缩器可视化样式 ===== */
+.compressor-params {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.compressor-param {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.compressor-param-value {
+  color: var(--accent-secondary);
+}
+
+/* ===== 相对定位容器 ===== */
+.visualization-area {
+  position: relative;
+}

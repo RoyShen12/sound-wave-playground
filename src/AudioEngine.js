@@ -64,6 +64,18 @@ export class AudioEngine {
 
     /** @type {((buffer: Float32Array) => void) | null} 音频处理回调 */
     this.onAudioProcess = null
+
+    /** @type {AudioBufferSourceNode | null} 外部音频源（文件播放） */
+    this.externalSource = null
+
+    /** @type {boolean} 是否已插入滤波器链 */
+    this._filterChainInserted = false
+
+    /** @type {DynamicsCompressorNode | null} 压缩器节点引用 */
+    this._compressorNode = null
+
+    /** @type {GainNode | null} 滤波器链输出节点引用 */
+    this._filterOutputNode = null
   }
 
   /**
@@ -359,5 +371,84 @@ export class AudioEngine {
   /** 采样率 */
   get sampleRate() {
     return this.audioContext ? this.audioContext.sampleRate : 0
+  }
+
+  /**
+   * 连接外部音频源（如文件播放的 AudioBufferSourceNode）到信号链
+   * @param {AudioBufferSourceNode} sourceNode - 外部音频源节点
+   */
+  connectExternalSource(sourceNode) {
+    this.externalSource = sourceNode
+    sourceNode.connect(this.masterGain)
+  }
+
+  /**
+   * 断开并释放外部音频源
+   */
+  disconnectExternalSource() {
+    if (this.externalSource) {
+      try {
+        this.externalSource.stop()
+        this.externalSource.disconnect()
+      } catch (_e) {
+        // 忽略已停止/断开的节点
+      }
+      this.externalSource = null
+    }
+  }
+
+  /**
+   * 在信号链中插入滤波器链
+   * 将 masterGain 的输出路由到 filterInput，filterOutput 再连接到分析器和目标
+   * @param {GainNode} filterInput - 滤波器链的输入节点
+   * @param {GainNode} filterOutput - 滤波器链的输出节点
+   */
+  insertFilterChain(filterInput, filterOutput) {
+    // 先断开 masterGain 的所有连接
+    this.masterGain.disconnect()
+
+    // masterGain → filterInput → [filter chain] → filterOutput → analysers + destination
+    this.masterGain.connect(filterInput)
+    filterOutput.connect(this.frequencyAnalyser)
+    filterOutput.connect(this.timeDomainAnalyser)
+    filterOutput.connect(this.audioContext.destination)
+
+    this._filterChainInserted = true
+    this._filterOutputNode = filterOutput
+
+    // 重新初始化处理节点
+    this.initProcessorNode(this.bufferSize)
+  }
+
+  /**
+   * 移除滤波器链，恢复直连
+   */
+  removeFilterChain() {
+    if (!this._filterChainInserted) return
+
+    this.masterGain.disconnect()
+    if (this._filterOutputNode) {
+      this._filterOutputNode.disconnect()
+    }
+
+    this.masterGain.connect(this.frequencyAnalyser)
+    this.masterGain.connect(this.timeDomainAnalyser)
+    this.masterGain.connect(this.audioContext.destination)
+
+    this._filterChainInserted = false
+    this._filterOutputNode = null
+
+    this.initProcessorNode(this.bufferSize)
+  }
+
+  /**
+   * 获取压缩器增益减少量（用于压缩器可视化）
+   * @returns {number} 增益减少量 (dB)，无压缩器时返回 0
+   */
+  getCompressorReduction() {
+    if (this._compressorNode) {
+      return this._compressorNode.reduction
+    }
+    return 0
   }
 }

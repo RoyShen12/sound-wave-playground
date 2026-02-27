@@ -1,6 +1,6 @@
 # 项目进度跟踪
 
-## 当前阶段：Phase 5 - 扩展音频功能
+## 当前阶段：Phase 6 - 教育与理论集成
 
 ### Phase 1 子任务进度 ✅ Phase 1 Complete
 - [x] P1.1 初始化 package.json，配置 Vite 构建工具
@@ -40,14 +40,14 @@
 - [x] P4.7 实现梅尔频谱图
 - [x] P4.8 Canvas 交互（点击显示频率和幅度）
 
-### Phase 5 子任务进度
-- [ ] P5.1 实现音频文件导入
-- [ ] P5.2 实现音频录制与 WAV 导出
-- [ ] P5.3 实现滤波器链
-- [ ] P5.4 实现卷积混响效果
-- [ ] P5.5 实现动态压缩器可视化
-- [ ] P5.6 实现自定义波形编辑器
-- [ ] P5.7 实现加法合成演示
+### Phase 5 子任务进度 ✅ Phase 5 Complete
+- [x] P5.1 实现音频文件导入
+- [x] P5.2 实现音频录制与 WAV 导出
+- [x] P5.3 实现滤波器链
+- [x] P5.4 实现卷积混响效果
+- [x] P5.5 实现动态压缩器可视化
+- [x] P5.6 实现自定义波形编辑器
+- [x] P5.7 实现加法合成演示
 
 ### Phase 6 子任务进度
 - [ ] P6.1 嵌入 DSP 理论说明面板
@@ -134,3 +134,21 @@
   - 频谱图点击交互（显示频率和幅度）
   - 所有可视化集成到主页面
   - Phase 4 完成
+
+### 迭代 6 - Phase 5: 扩展音频功能
+- 状态：已完成
+- 完成内容：
+  - AudioFileManager.js：音频文件导入（MP3/WAV/OGG）、拖拽上传、MediaRecorder 录制、WAV 编码导出
+  - AudioEffects.js：滤波器链（低通/高通/带通/陷波，带旁通结构和干/湿信号路径）
+  - AudioEffects.js：动态压缩器（阈值/拐点/压缩比/起始/释放参数控制）
+  - AudioEffects.js：卷积混响节点（加载脉冲响应 IR 文件）
+  - AdditiveSynthesizer：加法合成器（8 谐波独立控制，PeriodicWave 相位设置）
+  - FilterResponseRenderer.js：滤波器频率响应曲线可视化（对数频率轴、组合响应）
+  - FilterResponseRenderer.js：压缩器特性曲线可视化（输入/输出 dB 关系、拐点过渡）
+  - AdditiveSynthRenderer.js：谐波柱状图 + 合成波形预览
+  - AudioEngine 扩展：外部音频源连接/断开、滤波器链插入/移除
+  - UIController 扩展：文件导入面板、录制按钮、滤波器控制面板、压缩器参数面板、卷积混响加载、加法合成谐波滑块和预设
+  - 工具栏新增：文件导入、录制、下载按钮
+  - 拖拽上传覆盖层和文件播放信息栏
+  - ESLint 0 错误 0 警告，Vite 构建通过
+  - Phase 5 完成
