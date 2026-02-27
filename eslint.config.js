@@ -41,11 +41,13 @@ export default [
         FileReader: 'readonly',
         Promise: 'readonly',
         Error: 'readonly',
-        isFinite: 'readonly'
+        isFinite: 'readonly',
+        Worker: 'readonly',
+        Map: 'readonly'
       }
     },
     rules: {
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'no-console': 'off',
       'prefer-const': 'error',
       'no-var': 'error'

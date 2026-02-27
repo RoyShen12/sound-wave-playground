@@ -345,10 +345,16 @@ export class Visualizer {
   }
 
   destroy() {
+    // 取消 rAF 循环
     this.stopFrequencyVisualization()
+    // 断开 ResizeObserver
     if (this._resizeObserver) {
       this._resizeObserver.disconnect()
+      this._resizeObserver = null
     }
+    // 清空 Canvas 上下文引用
+    this.tdCtx = null
+    this.fdCtx = null
   }
 
   // ===== 私有方法 =====

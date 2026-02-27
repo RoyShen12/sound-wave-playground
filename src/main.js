@@ -43,6 +43,10 @@ const educationModule = new EducationModule(
   document.getElementById('educationCanvas')
 )
 
+// rAF 优化：跟踪动画帧 ID 和运行状态
+let vizAnimFrameId = null
+let isVisualizationRunning = false
+
 // 初始化可视化器和 UI
 visualizer.init()
 spectrogram.init()
@@ -114,6 +118,15 @@ const initAudioOnClick = async () => {
 
   console.log('音频引擎初始化完成', audioEngine.useWorklet ? '(AudioWorklet)' : '(ScriptProcessor)')
 
+  // 页面可见性优化：不可见时暂停渲染循环，可见时恢复
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAllVisualizations()
+    } else if (audioEngine.isPlaying) {
+      startAllVisualizations()
+    }
+  })
+
   document.removeEventListener('mousedown', initAudioOnClick)
 }
 
@@ -158,9 +171,15 @@ function setupPhase5Callbacks() {
 
 /**
  * 启动所有频域可视化
+ * 使用 isVisualizationRunning 标志防止重复启动
  */
 function startAllVisualizations() {
+  if (isVisualizationRunning) return
+  isVisualizationRunning = true
+
   const draw = () => {
+    if (!isVisualizationRunning) return
+
     const data = audioEngine.getFrequencyData()
 
     // 基础频域图由 Visualizer 内部的循环绘制
@@ -171,7 +190,7 @@ function startAllVisualizations() {
     // 压缩器增益减少量实时更新
     updateCompressorReduction()
 
-    requestAnimationFrame(draw)
+    vizAnimFrameId = requestAnimationFrame(draw)
   }
 
   // 基础频域可视化
@@ -179,6 +198,19 @@ function startAllVisualizations() {
 
   // 高级可视化
   draw()
+}
+
+/**
+ * 停止所有频域可视化
+ * 取消 rAF 循环，释放渲染资源
+ */
+function stopAllVisualizations() {
+  isVisualizationRunning = false
+  if (vizAnimFrameId) {
+    cancelAnimationFrame(vizAnimFrameId)
+    vizAnimFrameId = null
+  }
+  visualizer.stopFrequencyVisualization()
 }
 
 /**

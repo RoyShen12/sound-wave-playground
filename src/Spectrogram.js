@@ -24,8 +24,10 @@ export class SpectrogramRenderer {
     this.colorScheme = 'heatmap';
 
     // 用于存储历史频谱行的离屏 canvas（瀑布滚动缓冲）
-    this.bufferCanvas = null;
-    this.bufferCtx = null;
+    // 优先使用 OffscreenCanvas 以获得更好的渲染性能
+    this._offscreenCanvas = null;
+    this._offscreenCtx = null;
+    this._useOffscreen = false; // 标记是否使用了 OffscreenCanvas
 
     // 最近一帧的频域数据，用于点击查询
     this.lastFrequencyData = null;
@@ -44,20 +46,34 @@ export class SpectrogramRenderer {
    */
   init() {
     // 使用工具函数初始化高 DPI canvas，自适应容器宽度
-    const result = initHiDPICanvas(this.canvas, this.canvas.parentElement.clientWidth, this.height);
-    this.ctx = result.ctx;
-    this.width = result.width;
-    this.height = result.height;
+    const containerWidth = this.canvas.parentElement ? this.canvas.parentElement.clientWidth : 700;
+    this.ctx = initHiDPICanvas(this.canvas, containerWidth, this.height);
+    this.width = containerWidth;
 
     // 创建离屏 canvas 作为瀑布滚动缓冲区
-    this.bufferCanvas = document.createElement('canvas');
-    this.bufferCanvas.width = this.canvas.width;   // 物理像素
-    this.bufferCanvas.height = this.canvas.height;  // 物理像素
-    this.bufferCtx = this.bufferCanvas.getContext('2d');
+    // 优先使用 OffscreenCanvas（性能更优，不参与 DOM 布局计算），否则回退到普通 canvas
+    const physicalW = this.canvas.width;   // 物理像素
+    const physicalH = this.canvas.height;  // 物理像素
+
+    if (typeof OffscreenCanvas !== 'undefined') {
+      // 浏览器支持 OffscreenCanvas，使用它作为后缓冲区
+      this._offscreenCanvas = new OffscreenCanvas(physicalW, physicalH);
+      this._offscreenCtx = this._offscreenCanvas.getContext('2d');
+      this._useOffscreen = true;
+      console.info('[Spectrogram] 已启用 OffscreenCanvas 双缓冲优化');
+    } else {
+      // 回退方案：使用普通 canvas 元素作为后缓冲区
+      this._offscreenCanvas = document.createElement('canvas');
+      this._offscreenCanvas.width = physicalW;
+      this._offscreenCanvas.height = physicalH;
+      this._offscreenCtx = this._offscreenCanvas.getContext('2d');
+      this._useOffscreen = false;
+      console.info('[Spectrogram] OffscreenCanvas 不可用，使用普通 canvas 作为后缓冲');
+    }
 
     // 初始填充背景色
     this._fillBackground(this.ctx);
-    this._fillBackground(this.bufferCtx);
+    this._fillBackground(this._offscreenCtx);
 
     // 创建提示浮层元素
     this._createTooltip();
@@ -93,7 +109,7 @@ export class SpectrogramRenderer {
    * @param {number} frequencyStep - 每个频率 bin 对应的频率间隔（Hz）
    */
   update(frequencyData, frequencyStep) {
-    if (!this.ctx || !this.bufferCtx) return;
+    if (!this.ctx || !this._offscreenCtx) return;
 
     // 保存当前帧数据，供点击查询使用
     this.lastFrequencyData = new Uint8Array(frequencyData);
@@ -106,9 +122,9 @@ export class SpectrogramRenderer {
     const scrollStep = Math.max(1, Math.round(1 * dpr));
 
     // --- 瀑布滚动：将缓冲区内容整体下移一行 ---
-    // 先把当前缓冲区内容保存
-    this.bufferCtx.drawImage(
-      this.bufferCanvas,
+    // 先把当前缓冲区内容保存（在离屏 canvas 上操作，避免主 canvas 闪烁）
+    this._offscreenCtx.drawImage(
+      this._offscreenCanvas,
       0, 0, physicalWidth, physicalHeight,            // 源区域：整个缓冲
       0, scrollStep, physicalWidth, physicalHeight     // 目标区域：向下偏移
     );
@@ -121,8 +137,8 @@ export class SpectrogramRenderer {
       const value = frequencyData[i]; // 0-255
       const color = this._valueToColor(value);
 
-      this.bufferCtx.fillStyle = color;
-      this.bufferCtx.fillRect(
+      this._offscreenCtx.fillStyle = color;
+      this._offscreenCtx.fillRect(
         Math.floor(i * barWidth),
         0,
         Math.ceil(barWidth) + 1, // +1 避免间隙
@@ -130,8 +146,8 @@ export class SpectrogramRenderer {
       );
     }
 
-    // --- 将缓冲区绘制到主 canvas ---
-    this.ctx.drawImage(this.bufferCanvas, 0, 0);
+    // --- 将离屏缓冲区一次性绘制到主 canvas（减少主 canvas 操作次数） ---
+    this.ctx.drawImage(this._offscreenCanvas, 0, 0);
   }
 
   /**
@@ -150,9 +166,10 @@ export class SpectrogramRenderer {
       this.tooltip = null;
     }
 
-    // 清理缓冲区
-    this.bufferCanvas = null;
-    this.bufferCtx = null;
+    // 清理离屏缓冲区
+    this._offscreenCanvas = null;
+    this._offscreenCtx = null;
+    this._useOffscreen = false;
 
     // 清理引用
     this.lastFrequencyData = null;

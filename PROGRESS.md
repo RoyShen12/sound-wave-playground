@@ -1,6 +1,6 @@
 # 项目进度跟踪
 
-## 当前阶段：Phase 7 - 性能优化与测试
+## 当前阶段：Phase 8 - 文档与学术包装
 
 ### Phase 1 子任务进度 ✅ Phase 1 Complete
 - [x] P1.1 初始化 package.json，配置 Vite 构建工具
@@ -57,14 +57,14 @@
 - [x] P6.5 添加预设场景库
 - [x] P6.6 每个可视化模式添加帮助说明
 
-### Phase 7 子任务进度
-- [ ] P7.1 使用 Web Worker 处理耗时 DSP 计算
-- [ ] P7.2 实现 OffscreenCanvas 渲染优化
-- [ ] P7.3 使用 Vitest 编写单元测试（覆盖率 > 80%）
-- [ ] P7.4 编写 E2E 测试
-- [ ] P7.5 性能基准测试
-- [ ] P7.6 requestAnimationFrame 优化
-- [ ] P7.7 内存泄漏排查和修复
+### Phase 7 子任务进度 ✅ Phase 7 Complete
+- [x] P7.1 使用 Web Worker 处理耗时 DSP 计算
+- [x] P7.2 实现 OffscreenCanvas 渲染优化
+- [x] P7.3 使用 Vitest 编写单元测试（覆盖率 > 80%）
+- [x] P7.4 编写 E2E 测试
+- [x] P7.5 性能基准测试
+- [x] P7.6 requestAnimationFrame 优化
+- [x] P7.7 内存泄漏排查和修复
 
 ### Phase 8 子任务进度
 - [ ] P8.1 编写完整的 README.md
@@ -152,3 +152,27 @@
   - 拖拽上传覆盖层和文件播放信息栏
   - ESLint 0 错误 0 警告，Vite 构建通过
   - Phase 5 完成
+
+### 迭代 7 - Phase 6: 教育与理论集成
+- 状态：已完成
+- 完成内容：
+  - EducationModule.js：教育演示模块（窗函数对比、采样定理、Gibbs 现象）
+  - 窗函数演示：显示时域窗函数和频域频谱泄漏对比
+  - 采样定理（Nyquist）演示：信号频率和采样率交互控制，展示混叠现象
+  - Gibbs 现象演示：傅里叶级数逼近方波，可调谐波项数
+  - 预设场景库（PRESET_SCENES）：正弦波、和弦、白噪声、谐波、拍频、八度等
+  - 每个可视化模式添加帮助说明 tooltip
+  - Phase 6 完成
+
+### 迭代 8 - Phase 7: 性能优化与测试
+- 状态：已完成
+- 完成内容：
+  - P7.1 DSP Web Worker：创建 public/dsp-worker.js（包含 YIN、自相关、THD、峰值检测等函数），DSPWorkerManager.js（Worker 管理器，支持 Promise 接口和主线程回退）
+  - P7.2 OffscreenCanvas 优化：Spectrogram 使用 OffscreenCanvas 双缓冲（不支持时回退到普通 canvas）
+  - P7.3 单元测试：安装 Vitest + @vitest/coverage-v8，编写 123 个测试用例（DSPAnalyzer 81 个、utils 30 个、EducationModule 12 个），覆盖率 Statements 95.69%、Functions 95.45%、Lines 95.42%
+  - P7.4 E2E 测试：安装 Playwright，编写 11 个端到端测试覆盖核心用户流程（页面加载、Tab 切换、播放控制、配色切换、教育演示、预设场景等），全部通过
+  - P7.5 性能基准测试：36 个基准测试用例（不同 FFT 大小下的窗函数、YIN、自相关、RMS/Peak、峰值检测、THD），完整分析管线 4096 样本平均 0.5ms/帧仅占 30fps 帧预算 1.6%
+  - P7.6 requestAnimationFrame 优化：添加 visibilitychange 监听（页面不可见时暂停渲染），startAllVisualizations/stopAllVisualizations 函数，防止重复启动
+  - P7.7 内存泄漏修复：AudioEngine.destroy() 完整释放所有 AudioNode、Visualizer.destroy() 清理 ResizeObserver 和 Canvas 上下文
+  - ESLint 0 错误 0 警告，Vite 构建通过
+  - Phase 7 完成

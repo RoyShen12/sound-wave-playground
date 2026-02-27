@@ -451,4 +451,71 @@ export class AudioEngine {
     }
     return 0
   }
+
+  /**
+   * 销毁音频引擎，释放所有资源
+   */
+  destroy() {
+    // 停止播放
+    if (this.isPlaying) {
+      this.masterGain.gain.value = 0
+      this.isPlaying = false
+    }
+
+    // 断开并释放外部音频源
+    this.disconnectExternalSource()
+
+    // 移除滤波器链
+    if (this._filterChainInserted) {
+      this.removeFilterChain()
+    }
+
+    // 停止和断开振荡器
+    this.oscillators.forEach(osc => {
+      try { osc.stop(); osc.disconnect() } catch (_e) { /* 忽略已停止的节点 */ }
+    })
+    this.volumeGainNodes.forEach(g => {
+      try { g.disconnect() } catch (_e) { /* 忽略已断开的节点 */ }
+    })
+    this.switchGainNodes.forEach(g => {
+      try { g.disconnect() } catch (_e) { /* 忽略已断开的节点 */ }
+    })
+
+    // 停止白噪声
+    if (this.whiteNoiseSource) {
+      try { this.whiteNoiseSource.stop(); this.whiteNoiseSource.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+    if (this.whiteNoiseVolume) {
+      try { this.whiteNoiseVolume.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+    if (this.whiteNoiseEnable) {
+      try { this.whiteNoiseEnable.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+
+    // 断开处理节点
+    if (this.processorNode) {
+      try { this.processorNode.disconnect() } catch (_e) { /* 忽略 */ }
+      this.processorNode = null
+    }
+
+    // 断开分析器
+    if (this.frequencyAnalyser) {
+      try { this.frequencyAnalyser.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+    if (this.timeDomainAnalyser) {
+      try { this.timeDomainAnalyser.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+
+    // 断开主增益
+    if (this.masterGain) {
+      try { this.masterGain.disconnect() } catch (_e) { /* 忽略 */ }
+    }
+
+    // 关闭 AudioContext
+    if (this.audioContext && this.audioContext.state !== 'closed') {
+      this.audioContext.close()
+    }
+
+    this.audioContext = null
+  }
 }
