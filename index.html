@@ -75,6 +75,41 @@
                 <canvas id="sub"></canvas>
               </div>
             </div>
+
+            <!-- 频谱图 (Spectrogram) -->
+            <div class="canvas-container">
+              <div class="canvas-header">
+                <span class="canvas-title">频谱图 (Spectrogram)</span>
+                <div class="canvas-controls">
+                  <button class="small-btn color-scheme-btn active" data-scheme="heatmap">热力</button>
+                  <button class="small-btn color-scheme-btn" data-scheme="grayscale">灰度</button>
+                  <button class="small-btn color-scheme-btn" data-scheme="rainbow">彩虹</button>
+                </div>
+              </div>
+              <div class="canvas-wrapper">
+                <canvas id="spectrogram"></canvas>
+              </div>
+            </div>
+
+            <!-- 圆形频谱和李萨如图形 -->
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+              <div class="canvas-container" style="flex: 1; min-width: 300px;">
+                <div class="canvas-header">
+                  <span class="canvas-title">径向频谱 (Radial)</span>
+                </div>
+                <div class="canvas-wrapper">
+                  <canvas id="radial"></canvas>
+                </div>
+              </div>
+              <div class="canvas-container" style="flex: 1; min-width: 300px;">
+                <div class="canvas-header">
+                  <span class="canvas-title">李萨如图形 (Lissajous)</span>
+                </div>
+                <div class="canvas-wrapper">
+                  <canvas id="lissajous"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -26,7 +26,10 @@ export default [
         HTMLCanvasElement: 'readonly',
         OffscreenCanvas: 'readonly',
         ResizeObserver: 'readonly',
-        Uint8Array: 'readonly'
+        Uint8Array: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly'
       }
     },
     rules: {

@@ -6,6 +6,8 @@
 import { AudioEngine } from './AudioEngine.js'
 import { Visualizer } from './Visualizer.js'
 import { UIController } from './UIController.js'
+import { SpectrogramRenderer } from './Spectrogram.js'
+import { RadialVisualizer } from './RadialVisualizer.js'
 import './styles.css'
 
 // 创建核心实例
@@ -16,9 +18,28 @@ const visualizer = new Visualizer(
 )
 const uiController = new UIController(audioEngine, visualizer)
 
+// 高级可视化实例
+const spectrogram = new SpectrogramRenderer(document.getElementById('spectrogram'))
+const radialViz = new RadialVisualizer(
+  document.getElementById('radial'),
+  document.getElementById('lissajous')
+)
+
 // 初始化可视化器和 UI
 visualizer.init()
+spectrogram.init()
+radialViz.init()
 uiController.init()
+
+// 绑定频谱图配色切换按钮
+const colorBtns = document.querySelectorAll('.color-scheme-btn')
+colorBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    colorBtns.forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+    spectrogram.setColorScheme(btn.dataset.scheme)
+  })
+})
 
 // 等待用户点击以初始化音频（浏览器自动播放策略）
 const initOverlay = document.getElementById('initOverlay')
@@ -43,19 +64,22 @@ const initAudioOnClick = async () => {
   // 初始化音频处理节点
   audioEngine.initProcessorNode(4096)
 
-  // 设置音频处理回调：将 PCM 数据传递给可视化器绘制时域图
+  // 设置音频处理回调
   audioEngine.onAudioProcess = (buffer) => {
     visualizer.drawTimeDomain(buffer)
+
+    // 更新李萨如图形（单声道模拟左右声道）
+    radialViz.drawLissajous(buffer, buffer)
 
     // 更新 DSP 信息面板
     updateDSPInfoPanel(visualizer.dspInfo)
   }
 
-  // 初始化控制面板（需要音频引擎的数据）
+  // 初始化控制面板
   uiController.initControlPanel()
 
-  // 启动频域可视化
-  visualizer.startFrequencyVisualization(audioEngine)
+  // 启动频域可视化（含频谱图和圆形频谱）
+  startAllVisualizations()
 
   // 绘制频域刻度
   visualizer.drawFrequencyScale(audioEngine.frequencyStep, audioEngine.fftSize)
@@ -66,6 +90,28 @@ const initAudioOnClick = async () => {
 }
 
 document.addEventListener('mousedown', initAudioOnClick)
+
+/**
+ * 启动所有频域可视化
+ */
+function startAllVisualizations() {
+  const draw = () => {
+    const data = audioEngine.getFrequencyData()
+
+    // 基础频域图由 Visualizer 内部的循环绘制
+    // 这里启动频谱图和圆形频谱
+    spectrogram.update(data, audioEngine.frequencyStep)
+    radialViz.drawRadialSpectrum(data)
+
+    requestAnimationFrame(draw)
+  }
+
+  // 基础频域可视化
+  visualizer.startFrequencyVisualization(audioEngine)
+
+  // 高级可视化
+  draw()
+}
 
 /**
  * 更新 DSP 信息面板
