@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,19 +27,16 @@
         outline: none;
       }
     </style>
-    <title>Wave</title>
-    <script type="text/javascript" src="lodash.min.js"></script>
-    <script type="text/javascript" src="tools.js"></script>
-    <script type="text/javascript" src="analyze.js"></script>
+    <title>麦克风分析</title>
   </head>
-  <body onload="run()">
+  <body>
 
     <canvas id="main" width="800" height="400" style="z-index: 1;margin-bottom: 0;"></canvas>
     <canvas id="mainSUB" width="800" height="400" style="z-index: 0;top: 450px;"></canvas>
     <canvas id="frcy" width="800" height="850" style="z-index: 1;left: 1000px;"></canvas>
-    <canvas id="frcySUB" width="800" height="850" style="z-index: 1;left: 1000px;"></canvas>
 
     <p><span id="status"></span></p>
 
+    <script type="module" src="/src/mic.js"></script>
   </body>
 </html>

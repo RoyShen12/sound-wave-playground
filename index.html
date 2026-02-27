@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -53,13 +53,9 @@
         top: 8px;
       }
     </style>
-    <title>Wave</title>
-    <script type="text/javascript" src="jquery3.4.1.min.js"></script>
-    <script type="text/javascript" src="lodash.min.js"></script>
-    <script type="text/javascript" src="tools.js"></script>
-    <script type="text/javascript" src="output.js"></script>
+    <title>Sound Wave Playground</title>
   </head>
-  <body onload="run()">
+  <body>
     <button id="toggleSound"><span id="toggleLabel">Start!</span></button>
 
     <span class="spsv_sd">时域图每帧采样次数</span>
@@ -83,5 +79,6 @@
 
     <p><span id="status"></span></p>
 
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

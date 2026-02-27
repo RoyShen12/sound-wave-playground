@@ -1,0 +1,26 @@
+{
+  "name": "sound-wave-playground",
+  "version": "1.0.0",
+  "description": "基于 Web Audio API 的音频可视化与分析系统",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoyShen12/sound-wave-playground.git"
+  },
+  "keywords": [
+    "web-audio",
+    "visualization",
+    "dsp",
+    "fourier-transform"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}
