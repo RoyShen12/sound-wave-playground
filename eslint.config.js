@@ -24,7 +24,9 @@ export default [
         Uint8Array: 'readonly',
         Math: 'readonly',
         HTMLCanvasElement: 'readonly',
-        OffscreenCanvas: 'readonly'
+        OffscreenCanvas: 'readonly',
+        ResizeObserver: 'readonly',
+        Uint8Array: 'readonly'
       }
     },
     rules: {

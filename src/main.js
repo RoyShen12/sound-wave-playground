@@ -6,6 +6,7 @@
 import { AudioEngine } from './AudioEngine.js'
 import { Visualizer } from './Visualizer.js'
 import { UIController } from './UIController.js'
+import './styles.css'
 
 // 创建核心实例
 const audioEngine = new AudioEngine()
@@ -19,12 +20,19 @@ const uiController = new UIController(audioEngine, visualizer)
 visualizer.init()
 uiController.init()
 
-// 显示初始化提示
-visualizer.showInitMessage()
-
 // 等待用户点击以初始化音频（浏览器自动播放策略）
+const initOverlay = document.getElementById('initOverlay')
+
 const initAudioOnClick = async () => {
   console.log('音频引擎初始化中...')
+
+  // 隐藏初始化覆盖层
+  if (initOverlay) {
+    initOverlay.classList.add('hidden')
+    setTimeout(() => {
+      initOverlay.style.display = 'none'
+    }, 500)
+  }
 
   // 初始化音频引擎（异步加载 AudioWorklet）
   await audioEngine.init()
@@ -37,8 +45,8 @@ const initAudioOnClick = async () => {
     visualizer.drawTimeDomain(buffer)
   }
 
-  // 初始化采样率选择器
-  uiController.initSampleRateSelector()
+  // 初始化控制面板（需要音频引擎的数据）
+  uiController.initControlPanel()
 
   // 启动频域可视化
   visualizer.startFrequencyVisualization(audioEngine)
